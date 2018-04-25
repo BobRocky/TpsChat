@@ -1,34 +1,34 @@
-package main()
+package main
 
-import
-(
-		"bufio"
-		"fmt"
-		"net"
-		"os"
-		"time"
-)
-
-func main() {
-
-	listener, err := net.Listen("tcp", ":4545")
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer listener.Close()
-	fmt.Println("Сервер запущен.")
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			fmt.Println(err)
-			conn.Close()
-			continue
-		}
-		go handleConnection(conn) // запускаем горутину для обработки запроса
-	}
+type Server struct {
+	pattern   string
+	messages  []*Message
+	clients   map[int]*Client
+	addCh     chan *Client
+	delCh     chan *Client
+	sendAllCh chan *Message
+	doneCh    chan bool
+	errCh     chan error
 }
 
+// Create new chat server.
+func NewServer(pattern string) *Server {
+	messages := []*Message{}
+	clients := make(map[int]*Client)
+	addCh := make(chan *Client)
+	delCh := make(chan *Client)
+	sendAllCh := make(chan *Message)
+	doneCh := make(chan bool)
+	errCh := make(chan error)
 
-
+	return &Server{
+		pattern,
+		messages,
+		clients,
+		addCh,
+		delCh,
+		sendAllCh,
+		doneCh,
+		errCh,
+	}
+}
