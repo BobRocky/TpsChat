@@ -1,34 +1,27 @@
-package main
+/*package main
 
-type Server struct {
-	pattern   string
-	messages  []*Message
-	clients   map[int]*Client
-	addCh     chan *Client
-	delCh     chan *Client
-	sendAllCh chan *Message
-	doneCh    chan bool
-	errCh     chan error
-}
+import (
+	"os"
+	"fmt"
+	"net"
+)
 
-// Create new chat server.
-func NewServer(pattern string) *Server {
-	messages := []*Message{}
-	clients := make(map[int]*Client)
-	addCh := make(chan *Client)
-	delCh := make(chan *Client)
-	sendAllCh := make(chan *Message)
-	doneCh := make(chan bool)
-	errCh := make(chan error)
+func main()
+{
+	listener, err := net.Listen("tsp", ":8080")
 
-	return &Server{
-		pattern,
-		messages,
-		clients,
-		addCh,
-		delCh,
-		sendAllCh,
-		doneCh,
-		errCh,
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer istener.Close()
+	fmt.Println("Startig server...")
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println(err)
+			conn.Close()
+			continue
+		}
 	}
 }
