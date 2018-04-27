@@ -82,15 +82,37 @@ func Scan1() string {
 	fmt.Println(string(slice2)) 	//П
 
 }*/
+
+var q = Scan1()
+
+func proverka() string {
+	//client = Scan1()
+	arr := []byte(q)
+	y := arr[0:2] // /list -5
+	return string(y)
+}
+
+func proverka2() string {
+	//client = Scan1()
+	arr := []byte(q)
+	x := arr[5:len(arr)]
+	return string(x)
+}
+func proverka3() string {
+	arr := []byte(q)
+	y := arr[3:4] // /w 3
+	return string(y)
+}
+
 func main() {
-	var client string
-	client = Scan1()
-	arr := []byte(client)
-	//x := arr[2:len(arr)]
-	x := arr[0:2] // /list -5
-	fmt.Println(client)
-	fmt.Println(arr)
-	fmt.Println(x)
-	fmt.Println(string(arr))
-	fmt.Println(string(x))
+	var comand string
+	var slovo string
+	var id string
+	comand = proverka()
+	if comand == "/w" {
+		id = proverka3()
+		slovo = proverka2()
+		fmt.Print("Пользвателю ", id, ": ", slovo)
+	}
+
 }
