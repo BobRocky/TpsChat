@@ -23,15 +23,27 @@ func Scan1() string {
 	return in.Text()
 }
 
-//*******************************************************************
-
-func main() {
+func shifr() byte {
 	//*****************************Key*************************************
 	password := []byte("some")
 	//****************************************************
 
+	//************************Шифруем********************************************
+	payload := []byte(source)
+	encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
+	if encrypt_error != nil {
+		fmt.Println("Failed to encrypt:", encrypt_error)
+		os.Exit(1)
+	}
+	//***************************************************************************
+}
+
+//*******************************************************************
+
+func main() {
+
 	//***************************Подключение\Проверка*************************
-	conn, err := net.Dial("tcp", "localhost:4545")
+	conn, err := net.Dial("tcp", "25.30.186.173:8080")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -43,14 +55,16 @@ func main() {
 		fmt.Print("Login: ")
 		source = Scan1()
 
-		//************************Шифруем********************************************
+		shifr()
+
+		/*//************************Шифруем********************************************
 		payload := []byte(source)
 		encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
 		if encrypt_error != nil {
 			fmt.Println("Failed to encrypt:", encrypt_error)
 			os.Exit(1)
 		}
-		//***************************************************************************
+		//***************************************************************************/
 
 		//******************Отправка сообщения серверу******************
 		if n, err := conn.Write(encrypted); n == 0 || err != nil {
@@ -81,21 +95,21 @@ func main() {
 		} else {
 			break
 		}
-
+		break
 	}
 
 	for {
 		fmt.Print("Password: ")
 		source = Scan1()
 
-		//************************Шифруем********************************************
+		/************************Шифруем********************************************
 		payload := []byte(source)
 		encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
 		if encrypt_error != nil {
 			fmt.Println("Failed to encrypt:", encrypt_error)
 			os.Exit(1)
 		}
-		//***************************************************************************
+		//***************************************************************************/
 
 		//******************Отправка сообщения серверу******************
 		if n, err := conn.Write(encrypted); n == 0 || err != nil {
@@ -133,14 +147,14 @@ func main() {
 			if source == "/help" {
 				fmt.Println("/l - список челиков онлайн\n/w id написать челику")
 			}
-			//******************Шифруем**********************************************
+			/******************Шифруем**********************************************
 			payload := []byte(source)
 			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
 			if encrypt_error != nil {
 				fmt.Println("Failed to encrypt:", encrypt_error)
 				os.Exit(1)
 			}
-			//***************************************************************************
+			//***************************************************************************/
 
 			//******************Отправка сообщения серверу******************
 			if n, err := conn.Write(encrypted); n == 0 || err != nil {
