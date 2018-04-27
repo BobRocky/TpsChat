@@ -70,13 +70,15 @@ func Scan1() string {
 }
 func main() {
 	var client string
+	fmt.Print("Пиши уебок: ")
 	client = Scan1()
 	slice1 := []byte(client)
 	slice2 := make([]byte, 2)
 	copy(slice2, slice1)
-	fmt.Println(slice1)         //[208 159 209 128 208 184 208 178 208 181 209 130]
+	/*fmt.Println(slice1)         //[208 159 209 128 208 184 208 178 208 181 209 130]
 	fmt.Println(string(slice1)) //Привет
-	fmt.Println(slice2)         //[208 159]
+	fmt.Println(slice2)  */ //[208 159]
+	fmt.Print("Вот твой первый высер: ")
 	fmt.Println(string(slice2)) //П
 
 }
