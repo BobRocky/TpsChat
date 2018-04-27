@@ -9,6 +9,8 @@ import (
 	"github.com/richard-lyman/lithcrypt"
 )
 
+var source string
+
 /*
 var source string
 var n int
@@ -79,28 +81,41 @@ func main() {
 	}
 }
 
+func shifr(conn net.Conn) string {
+	//ключ
+	password := []byte("some")
+
+	defer conn.Close()
+	//Принятие слова
+	input := make([]byte, (1024))
+	n, err := conn.Read(input)
+	if n == 0 || err != nil {
+		fmt.Println("Read error:", err)
+		os.Exit(1)
+	}
+
+	//Расшифруем
+	original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
+	if decrypt_error != nil {
+		fmt.Println("Failed to decrypt:", decrypt_error)
+		os.Exit(1)
+	}
+
+	source := string(original)
+	//Слово в source
+	return source
+}
+
 //Обработка подключения
 func handleConnection(conn net.Conn) {
 	//Ключ
 	password := []byte("some")
 	defer conn.Close()
 	for {
-		// считываем полученные в запросе данные
-		input := make([]byte, (1024))
-		n, err := conn.Read(input)
-		if n == 0 || err != nil {
-			fmt.Println("Read error:", err)
-			break
-		}
-		//*************************Расшифруем********************************************
-		original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
-		if decrypt_error != nil {
-			fmt.Println("Failed to decrypt:", decrypt_error)
-			os.Exit(1)
-		}
-		source := string(original)
-
-		if source != "Kirill" {
+		var a string
+		a = shifr(conn)
+		fmt.Print(a)
+		if a != "Kirill" {
 
 			source = Scan2()
 			//************************Шифруем*********************************************
