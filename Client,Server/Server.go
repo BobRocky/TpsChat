@@ -12,9 +12,12 @@ var source string
 var n int
 var input []byte
 var encrypted []byte
+var original []byte
+var conn net.Conn
 
 //Функция шифрования
 func scan1(encrypted []byte) {
+
 	password := []byte("some")
 	payload := []byte(source)
 	encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
@@ -27,6 +30,14 @@ func scan1(encrypted []byte) {
 
 //функция расшифровки
 func scan2(input []byte) {
+
+	input := make([]byte, (8192))
+	n, err := conn.Read(input)
+	if n == 0 || err != nil {
+		fmt.Println("Read error:", err)
+		os.Exit(1)
+	}
+
 	password := []byte("some")
 	original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
 	if decrypt_error != nil {
@@ -38,7 +49,7 @@ func scan2(input []byte) {
 }
 
 func main() {
-	listener, err := net.Listen("tcp", ":8080")
+	listener, err := net.Listen("tcp", ":4545")
 
 	if err != nil {
 		fmt.Println(err)
@@ -63,7 +74,7 @@ func handleConnection(conn net.Conn) {
 
 	for {
 		//Считвыем полученные данные
-		input := make([]byte, (1024))
+		input := make([]byte, (8192))
 		n, err := conn.Read(input)
 		if n == 0 || err != nil {
 			fmt.Println("Read error:", err)
@@ -71,6 +82,7 @@ func handleConnection(conn net.Conn) {
 		}
 		//Расшифровываем
 		scan2(input)
+		fmt.Println(source)
 		fmt.Print(input)
 		if source != "Kirill" {
 			fmt.Println(scan2, source)
