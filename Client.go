@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	//Ссылка алгоритма шифрования
 )
 
@@ -51,7 +49,7 @@ func main() {
 	//x := arr[0:5]
 	x := arr[2:5]
 	fmt.Println(arr, x)
-}*/
+}
 
 /*func main(){
 	var client string
@@ -59,7 +57,7 @@ func main() {
 
 	client = make
 
-}*/
+}
 func Scan1() string {
 	in := bufio.NewScanner(os.Stdin)
 	in.Scan()
@@ -68,17 +66,22 @@ func Scan1() string {
 	}
 	return in.Text()
 }
-func main() {
+	func main() {
 	var client string
 	fmt.Print("Пиши уебок: ")
 	client = Scan1()
 	slice1 := []byte(client)
 	slice2 := make([]byte, 2)
 	copy(slice2, slice1)
-	/*fmt.Println(slice1)         //[208 159 209 128 208 184 208 178 208 181 209 130]
-	fmt.Println(string(slice1)) //Привет
-	fmt.Println(slice2)  */ //[208 159]
+	/*fmt.Println(slice1)         	//[208 159 209 128 208 184 208 178 208 181 209 130]
+	fmt.Println(string(slice1))		 //Привет
+	fmt.Println(slice2)				 //[208 159]
 	fmt.Print("Вот твой первый высер: ")
-	fmt.Println(string(slice2)) //П
+	fmt.Println(string(slice2)) 	//П
 
+}*/
+func main() {
+	arr := []float64{1, 2, 3, 4, 5}
+	x := arr[0:5]
+	fmt.Println(arr, x)
 }
