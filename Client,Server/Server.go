@@ -116,6 +116,19 @@ func handleConnection(conn net.Conn) {
 				return
 			}
 		} else {
+			source = Scan2()
+			//************************Шифруем*********************************************
+			payload := []byte(source)
+			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
+			if encrypt_error != nil {
+				fmt.Println("Failed to encrypt:", encrypt_error)
+				os.Exit(1)
+			}
+			if n, err := conn.Write(encrypted); n == 0 || err != nil {
+				fmt.Print("Client: ")
+				fmt.Println(err)
+				return
+			}
 			break
 		}
 	}
@@ -151,6 +164,19 @@ func handleConnection(conn net.Conn) {
 				return
 			}
 		} else {
+			source = Scan2()
+			//************************Шифруем*********************************************
+			payload := []byte(source)
+			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
+			if encrypt_error != nil {
+				fmt.Println("Failed to encrypt:", encrypt_error)
+				os.Exit(1)
+			}
+			if n, err := conn.Write(encrypted); n == 0 || err != nil {
+				fmt.Print("Client: ")
+				fmt.Println(err)
+				return
+			}
 			break
 		}
 	}
