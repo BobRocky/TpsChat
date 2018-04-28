@@ -35,7 +35,7 @@ func main() {
 	}
 }
 
-//Функция расшифровки
+//Функция принятия данных и рашифровки
 func shifr(conn net.Conn) string {
 	//ключ
 	password := []byte("some")
@@ -60,7 +60,7 @@ func shifr(conn net.Conn) string {
 	return string(original)
 }
 
-//Функция шифровки
+//Функция шифровки и отправки
 func shifr1(conn net.Conn) string {
 
 	password := []byte("some")
