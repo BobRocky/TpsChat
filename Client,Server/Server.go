@@ -10,6 +10,10 @@ import (
 )
 
 var source string
+var errl string
+var errp string
+var noerr string
+var a string
 
 /*
 var source string
@@ -62,7 +66,7 @@ func Scan2() string {
 }
 
 func main() {
-	listener, err := net.Listen("tcp", ":4545")
+	listener, err := net.Listen("tcp", ":8080")
 
 	if err != nil {
 		fmt.Println(err)
@@ -85,9 +89,8 @@ func shifr(conn net.Conn) string {
 	//ключ
 	password := []byte("some")
 
-	defer conn.Close()
 	//Принятие слова
-	input := make([]byte, (1024))
+	input := make([]byte, (1024 * 8))
 	n, err := conn.Read(input)
 	if n == 0 || err != nil {
 		fmt.Println("Read error:", err)
@@ -101,98 +104,78 @@ func shifr(conn net.Conn) string {
 		os.Exit(1)
 	}
 
-	source := string(original)
+	//source := string(original)
 	//Слово в source
+	return string(original)
+}
+
+func shifr1(conn net.Conn) string {
+
+	password := []byte("some")
+
+	payload := []byte(source)
+	encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
+	if encrypt_error != nil {
+		fmt.Println("Failed to encrypt:", encrypt_error)
+		os.Exit(1)
+	}
+	if n, err := conn.Write(encrypted); n == 0 || err != nil {
+		fmt.Print("Client: ")
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	return source
 }
 
 //Обработка подключения
 func handleConnection(conn net.Conn) {
-	//Ключ
-	password := []byte("some")
+
 	defer conn.Close()
+
 	for {
-		var a string
+
 		a = shifr(conn)
-		fmt.Print(a)
+		fmt.Println(a)
+
 		if a != "Kirill" {
 
-			source = Scan2()
-			//************************Шифруем*********************************************
-			payload := []byte(source)
-			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
-			if encrypt_error != nil {
-				fmt.Println("Failed to encrypt:", encrypt_error)
-				os.Exit(1)
-			}
-			if n, err := conn.Write(encrypted); n == 0 || err != nil {
-				fmt.Print("Client: ")
-				fmt.Println(err)
-				return
-			}
+			errl = "errl"
+			source = errl
+			source := shifr1(conn)
+			fmt.Println(source)
+			continue
+
 		} else {
-			source = Scan2()
-			//************************Шифруем*********************************************
-			payload := []byte(source)
-			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
-			if encrypt_error != nil {
-				fmt.Println("Failed to encrypt:", encrypt_error)
-				os.Exit(1)
-			}
-			if n, err := conn.Write(encrypted); n == 0 || err != nil {
-				fmt.Print("Client: ")
-				fmt.Println(err)
-				return
-			}
+
+			noerr = "noerr"
+			source = noerr
+			source := shifr1(conn)
+			fmt.Println(source)
 			break
 		}
 	}
 	for {
 		// считываем полученные в запросе данные
-		input := make([]byte, (1024))
-		n, err := conn.Read(input)
-		if n == 0 || err != nil {
-			fmt.Println("Read error:", err)
-			break
-		}
-		//*************************Расшифруем********************************************
-		original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
-		if decrypt_error != nil {
-			fmt.Println("Failed to decrypt:", decrypt_error)
-			os.Exit(1)
-		}
-		source := string(original)
+		a = shifr(conn)
+		fmt.Println(a)
 
-		if source != "Kirill" {
+		if a != "Kirill" {
 
-			source = Scan2()
-			//************************Шифруем*********************************************
-			payload := []byte(source)
-			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
-			if encrypt_error != nil {
-				fmt.Println("Failed to encrypt:", encrypt_error)
-				os.Exit(1)
-			}
-			if n, err := conn.Write(encrypted); n == 0 || err != nil {
-				fmt.Print("Client: ")
-				fmt.Println(err)
-				return
-			}
+			errp := "errp"
+			source = errp
+			source := shifr1(conn)
+			fmt.Println(source)
+			continue
+
 		} else {
-			source = Scan2()
-			//************************Шифруем*********************************************
-			payload := []byte(source)
-			encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
-			if encrypt_error != nil {
-				fmt.Println("Failed to encrypt:", encrypt_error)
-				os.Exit(1)
-			}
-			if n, err := conn.Write(encrypted); n == 0 || err != nil {
-				fmt.Print("Client: ")
-				fmt.Println(err)
-				return
-			}
+
+			noerr = "noerr"
+			source = noerr
+			source := shifr1(conn)
+			fmt.Println(source)
 			break
+
 		}
 	}
 }

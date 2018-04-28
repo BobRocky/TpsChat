@@ -31,7 +31,7 @@ func main() {
 	//****************************************************
 
 	//***************************Подключение\Проверка*************************
-	conn, err := net.Dial("tcp", "localhost:4545")
+	conn, err := net.Dial("tcp", "localhost:8080")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -40,7 +40,7 @@ func main() {
 	defer conn.Close()
 	//********************************************************************
 	for {
-		fmt.Println("login: ")
+		fmt.Print("login: ")
 		source = Scan1()
 
 		//************************Шифруем********************************************
@@ -76,6 +76,8 @@ func main() {
 		//**************************************************************
 
 		proverka = string(original)
+		fmt.Println(proverka)
+
 		if proverka == "errl" { //errl Ошибка логина
 			fmt.Println("Логин введен не верно\nПовторите попытку: ")
 		} else {
@@ -85,7 +87,7 @@ func main() {
 	}
 
 	for {
-		fmt.Println("password: ")
+		fmt.Print("password: ")
 		source = Scan1()
 
 		//************************Шифруем********************************************
