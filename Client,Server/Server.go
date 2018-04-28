@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -15,56 +14,7 @@ var errp string
 var noerr string
 var a string
 
-/*
-var source string
-var n int
-var input []byte
-var encrypted []byte
-var original []byte
-var conn net.Conn
-
-//Функция шифрования
-func scan1(encrypted []byte) {
-
-	password := []byte("some")
-	payload := []byte(source)
-	encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
-	if encrypt_error != nil {
-		fmt.Println("Failed to encrypt:", encrypt_error)
-		os.Exit(1)
-	}
-	return
-}
-
-//функция расшифровки
-func scan2() {
-
-	input := make([]byte, (8192))
-	n, err := conn.Read(input)
-	if n == 0 || err != nil {
-		fmt.Println("Read error:", err)
-		os.Exit(1)
-	}
-
-	password := []byte("some")
-	original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
-	if decrypt_error != nil {
-		fmt.Println("Failed to decrypt:", decrypt_error)
-		os.Exit(1)
-	}
-	source = string(original)
-	return
-}*/
-
-func Scan2() string {
-	in := bufio.NewScanner(os.Stdin)
-	in.Scan()
-	if err := in.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "Ошибка ввода:", err)
-	}
-	return in.Text()
-}
-
+//Функция работы сервреа
 func main() {
 	listener, err := net.Listen("tcp", ":8080")
 
@@ -85,6 +35,7 @@ func main() {
 	}
 }
 
+//Функция расшифровки
 func shifr(conn net.Conn) string {
 	//ключ
 	password := []byte("some")
@@ -109,16 +60,20 @@ func shifr(conn net.Conn) string {
 	return string(original)
 }
 
+//Функция шифровки
 func shifr1(conn net.Conn) string {
 
 	password := []byte("some")
 
+	//Шифруем
 	payload := []byte(source)
 	encrypted, encrypt_error := lithcrypt.Encrypt(password, payload)
 	if encrypt_error != nil {
 		fmt.Println("Failed to encrypt:", encrypt_error)
 		os.Exit(1)
 	}
+
+	//Отправляем
 	if n, err := conn.Write(encrypted); n == 0 || err != nil {
 		fmt.Print("Client: ")
 		fmt.Println(err)
@@ -133,47 +88,64 @@ func handleConnection(conn net.Conn) {
 
 	defer conn.Close()
 
+	//Цикл проверки логина
 	for {
 
+		//принимаем и расшифровываем логин
 		a = shifr(conn)
 		fmt.Println(a)
 
+		//Проверям правильность лониа
 		if a != "Kirill" {
 
+			//Если логин не правильный отправляем клиенту ошибку
 			errl = "errl"
 			source = errl
+			//Шифруем и отраляем ошибку
 			source := shifr1(conn)
 			fmt.Println(source)
+			//Продолжаем цикл
 			continue
 
 		} else {
 
+			//Если логин правильный отправляем клиенту то что ошибок нету
 			noerr = "noerr"
 			source = noerr
+			//Шифруем и отправляем то что ошибки нет
 			source := shifr1(conn)
 			fmt.Println(source)
+			//Закнчиваем цикл
 			break
 		}
 	}
+	//Цикл проверки пароля
 	for {
-		// считываем полученные в запросе данные
+
+		//Принимаем и рашифровываем пароль
 		a = shifr(conn)
 		fmt.Println(a)
 
+		//Проверяем правильность пароля
 		if a != "Kirill" {
 
+			//Если пароль не пральный отправляем ошибку
 			errp := "errp"
 			source = errp
+			//Шифруем и отраляем ошибку
 			source := shifr1(conn)
 			fmt.Println(source)
+			//Продолжаем цикл
 			continue
 
 		} else {
 
 			noerr = "noerr"
 			source = noerr
+			//Шифруем и отправляем то что ошибки нет
 			source := shifr1(conn)
 			fmt.Println(source)
+			//Закнчиваем цикл
 			break
 
 		}
