@@ -8,16 +8,26 @@ import (
 	"github.com/richard-lyman/lithcrypt"
 )
 
+var dict = map[string]string{
+	"fatty":           "322",
+	"kista":           "warframe.dlya.pidorov",
+	"old":             "pidor228",
+	"arsen":           "senya",
+	"sutulaya_sobaka": "anya",
+}
+
 var source string
 var errl string
 var errp string
 var noerr string
 var a string
+var q string
 
 //Функция работы сервреа
 func main() {
 	listener, err := net.Listen("tcp", ":8080")
-
+	fmt.Println(net.Listen)
+	fmt.Println(listener)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -31,6 +41,7 @@ func main() {
 			conn.Close()
 			continue
 		}
+		fmt.Println(conn)
 		go handleConnection(conn)
 	}
 }
@@ -39,6 +50,8 @@ func main() {
 func shifr(conn net.Conn) string {
 	//ключ
 	password := []byte("some")
+
+	fmt.Println(conn)
 
 	//Принятие слова
 	input := make([]byte, (1024 * 8))
@@ -95,8 +108,13 @@ func handleConnection(conn net.Conn) {
 		a = shifr(conn)
 		fmt.Println(a)
 
+		//Проверяем существует такой логин или нет
+		login := string(a)
+		target, a := dict[login]
+		paroll := target
+
 		//Проверям правильность лониа
-		if a != "Kirill" {
+		if a == false {
 
 			//Если логин не правильный отправляем клиенту ошибку
 			errl = "errl"
@@ -122,12 +140,16 @@ func handleConnection(conn net.Conn) {
 	//Цикл проверки пароля
 	for {
 
+		fmt.Println(paroll)
 		//Принимаем и рашифровываем пароль
 		a = shifr(conn)
 		fmt.Println(a)
 
+		parol := string(a)
+		target, c := dict[parol]
+
 		//Проверяем правильность пароля
-		if a != "Kirill" {
+		if target != paroll {
 
 			//Если пароль не пральный отправляем ошибку
 			errp := "errp"
@@ -149,5 +171,9 @@ func handleConnection(conn net.Conn) {
 			break
 
 		}
+	}
+
+	for {
+
 	}
 }
