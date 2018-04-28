@@ -82,7 +82,7 @@ func rshifr(conn net.Conn) string {
 
 func main() {
 	//Идет подключение к серверу
-	conn, err := net.Dial("tcp", "localhost:8080")
+	conn, err := net.Dial("tcp", "25.30.186.173:8080")
 	if err != nil {
 		fmt.Println(err)
 		return

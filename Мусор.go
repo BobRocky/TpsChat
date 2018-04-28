@@ -20,19 +20,19 @@ func comand() string {
 
 //Из введеного достает id
 func id() string {
-	arr := []byte(source) //из переменной q делаем массив arr
-	y := arr[3:4]         //переменной даем символы от arr от 3 до 4 символа
+	arr := []byte(source) //из переменной q делаем массив arr8
+	y := arr[8:9]         //переменной даем символы от arr от 3 до 4 символа
 	return string(y)      //Функцие proverka даем значение y в расширении string
 }
 
 //Из введеного достает текст
 func text() string {
 	arr := []byte(source) //из переменной q делаем массив arr
-	x := arr[5:len(arr)]  //переменной даем символы от arr от 5 символа до длины arr
+	x := arr[8:len(arr)]  //переменной даем символы от arr от 5 символа до длины arr
 	return string(x)      //Функцие proverka2 даем значение y в расширении string
 }
 
-//Функция... Эмм... Пробела?....
+//Функция... Эмм... Пробел?....
 func probel() string {
 	arr := []byte(source) //из переменной q делаем массив arr
 	y := arr[2:3]         //переменной даем символы от arr от 2 до 3 символа
@@ -69,7 +69,7 @@ func rshifr(conn net.Conn) string {
 	input := make([]byte, (1024))
 	n, err := conn.Read(input)
 	if n == 0 || err != nil {
-		fmt.Println("Read error123:", err)
+		fmt.Println("Read error3:", err)
 		os.Exit(1)
 	}
 	original, decrypt_error := lithcrypt.Decrypt(password, input[0:n])
@@ -82,13 +82,12 @@ func rshifr(conn net.Conn) string {
 
 func main() {
 	//Идет подключение к серверу
-	conn, err := net.Dial("tcp", "localhost:8080")
+	conn, err := net.Dial("tcp", "25.30.186.173:8080")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer conn.Close()
-
 	for {
 		//Ввод логина
 		fmt.Print("login: ")
@@ -124,38 +123,38 @@ func main() {
 			break
 		}
 	}
-
+	fmt.Println("Вы успешно автоватезировались!")
+	fmt.Println("Чтобы узнать список команд напишите /help")
 	for {
-		fmt.Println("Вы успешно автоватезировались!")
-		fmt.Println("Чтобы узнать список команд напишите /help")
 		//Ввод слова с клавиатуры
 		source = Scan1()
+
 		//Сразу приравниваем функции к переменным
 		comand := comand()
 		id := id()
 		text := text()
 		probel := probel()
-
 		if comand == "/h" {
 			fmt.Println("\t\tСписок команд:\n/list-Посмотреть список клиентов онлайн\n/write [id] [текст] - напиать пользователю\n/back - Выйти из диолога с собеседником\n/exit - Выход из программы.")
+			fmt.Println(comand)
 		}
 		if comand == "/l" {
 			source = comand
+			fmt.Println(comand)
 			encrypted := []byte(shir())
 			if n, err := conn.Write(encrypted); n == 0 || err != nil {
 				fmt.Println(err)
-				return
 			}
+			otvet := rshifr(conn)
+			fmt.Println(otvet)
+			source = Scan1()
 		}
 
-		otvet := rshifr(conn)
-		fmt.Println(otvet)
 		if comand == "/w" {
 			switch {
 			case id == "1":
 				for text == "/back" {
 					fmt.Println("Вы вошли в диолог с пользователем ", id)
-					source = Scan1()
 					message := comand + probel + id + probel + text
 					source = message
 					encrypted := []byte(shir())
