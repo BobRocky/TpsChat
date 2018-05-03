@@ -26,8 +26,6 @@ var q string
 //Функция работы сервреа
 func main() {
 	listener, err := net.Listen("tcp", ":8080")
-	fmt.Println(net.Listen)
-	fmt.Println(listener)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -41,7 +39,6 @@ func main() {
 			conn.Close()
 			continue
 		}
-		fmt.Println(conn)
 		go handleConnection(conn)
 	}
 }
@@ -108,10 +105,12 @@ func handleConnection(conn net.Conn) {
 		a = shifr(conn)
 		fmt.Println(a)
 
+		var paroll string
+
 		//Проверяем существует такой логин или нет
 		login := string(a)
 		target, a := dict[login]
-		paroll := target
+		paroll = target
 
 		//Проверям правильность лониа
 		if a == false {
