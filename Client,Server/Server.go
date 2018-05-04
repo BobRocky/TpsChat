@@ -10,8 +10,8 @@ import (
 
 var dict = map[string]string{
 	"fatty":           "322",
-	"kista":           "warframe.dlya.pidorov",
-	"old":             "pidor228",
+	"kista":           "qwertyasd",
+	"old":             "piror228",
 	"arsen":           "senya",
 	"sutulaya_sobaka": "anya",
 }
