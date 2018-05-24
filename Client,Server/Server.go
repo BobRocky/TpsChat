@@ -22,6 +22,7 @@ var errp string
 var noerr string
 var a string
 var q string
+var b string
 
 //Функция работы сервреа
 func main() {
@@ -47,8 +48,6 @@ func main() {
 func shifr(conn net.Conn) string {
 	//ключ
 	password := []byte("some")
-
-	fmt.Println(conn)
 
 	//Принятие слова
 	input := make([]byte, (1024 * 8))
@@ -103,14 +102,10 @@ func handleConnection(conn net.Conn) {
 
 		//принимаем и расшифровываем логин
 		a = shifr(conn)
-		fmt.Println(a)
-
-		var paroll string
 
 		//Проверяем существует такой логин или нет
 		login := string(a)
 		target, a := dict[login]
-		paroll = target
 
 		//Проверям правильность лониа
 		if a == false {
@@ -120,7 +115,7 @@ func handleConnection(conn net.Conn) {
 			source = errl
 			//Шифруем и отраляем ошибку
 			source := shifr1(conn)
-			fmt.Println(source)
+			fmt.Println("source1: ", source)
 			//Продолжаем цикл
 			continue
 
@@ -131,46 +126,43 @@ func handleConnection(conn net.Conn) {
 			source = noerr
 			//Шифруем и отправляем то что ошибки нет
 			source := shifr1(conn)
-			fmt.Println(source)
+			fmt.Println("source2: ", source)
 			//Закнчиваем цикл
+			for {
+
+				fmt.Println("target: ", target)
+				//Принимаем и рашифровываем пароль
+				b = shifr(conn)
+				fmt.Println(b)
+
+				//Проверяем правильность пароля
+				if ne b target{
+
+					//Если пароль не пральный отправляем ошибку
+					errp := "errp"
+					source = errp
+					//Шифруем и отраляем ошибку
+					source := shifr1(conn)
+					fmt.Println(source)
+					//Продолжаем цикл
+					continue
+
+				} else {
+
+					noerr = "noerr"
+					source = noerr
+					//Шифруем и отправляем то что ошибки нет
+					source := shifr1(conn)
+					fmt.Println(source)
+					//Закнчиваем цикл
+					break
+
+				}
+			}
 			break
 		}
 	}
 	//Цикл проверки пароля
-	for {
-
-		fmt.Println(paroll)
-		//Принимаем и рашифровываем пароль
-		a = shifr(conn)
-		fmt.Println(a)
-
-		parol := string(a)
-		target, c := dict[parol]
-
-		//Проверяем правильность пароля
-		if target != paroll {
-
-			//Если пароль не пральный отправляем ошибку
-			errp := "errp"
-			source = errp
-			//Шифруем и отраляем ошибку
-			source := shifr1(conn)
-			fmt.Println(source)
-			//Продолжаем цикл
-			continue
-
-		} else {
-
-			noerr = "noerr"
-			source = noerr
-			//Шифруем и отправляем то что ошибки нет
-			source := shifr1(conn)
-			fmt.Println(source)
-			//Закнчиваем цикл
-			break
-
-		}
-	}
 
 	for {
 
